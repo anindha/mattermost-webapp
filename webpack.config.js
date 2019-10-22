@@ -5,6 +5,7 @@ const childProcess = require('child_process');
 
 const path = require('path');
 const url = require('url');
+const fs = require('fs');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
@@ -400,11 +401,18 @@ if (targetIsDevServer) {
                     // redirect (root, team routes, etc)
                     return '/static/root.html';
                 },
-                logLevel: 'silent',
-                target: 'http://localhost:8065',
+                logLevel: 'debug',
+                //target: 'http://localhost:8065',
+                target: 'https://community-daily.mattermost.com',
                 xfwd: true,
-                ws: true,
+                //ws: true,
+                changeOrigin: true,
+                secure: false
             }],
+            https: {
+                key: fs.readFileSync(path.resolve(__dirname, './key.pem')),
+                cert: fs.readFileSync(path.resolve(__dirname, './cert.pem'))
+            },
             port: 9005,
             watchContentBase: true,
             writeToDisk: false,
